@@ -4,409 +4,121 @@
 
 {% block body %}
 
-    <style>
+<style>
+  #loading,
+  #results {
+    display: none;
+  }
 
-    #loading, #results {
-        display: none;
-    }
-    #loading {
-        width: 100%;
-    }
+  #loading {
+    width: 100%;
+  }
 
-    #loading img {
-        width: 100px;
-        margin: 0 auto;
-        display: block;
-    }
-
-    </style>
-
-
-    <main class="flex-shrink-0 main has-footer">
-        {% include 'header.html' %}
-        <!-- Fixed navbar -->
-    
-
-        <div class="container">
-            <div class="row">
-              <div class="col-lg-6 mx-auto">
-                <div class="card card-body text-center mt-5">
-                  <h1 class="heading display-5 pb-3">Camera</h1>
-                  
-                  <form id="calorie-form" method="POST" action="{% url 'camera' %}">
-                    {% csrf_token %}
-
-                    <fieldset class="form-group">
-                      <div class="row">
-                        <legend class="col-form-label col-sm-2 pt-0">UNITS</legend>
-                        <div class="col-sm-10" id="form-radio">
-                          <div class="custom-control custom-radio custom-control-inline">
-                            <input type="radio" id="imperical" name="measurement" class="custom-control-input" value="imperical" checked="checked">
-                            <label class="custom-control-label" for="imperical">U.S. (Imperial)</label>
-                          </div>
-                          <div class="custom-control custom-radio custom-control-inline">
-                            <input type="radio" id="metric" name="measurement" value="metric" class="custom-control-input">
-                            <label class="custom-control-label" for="metric">Metric</label>
-                          </div>  
-                        </div>
-                      </div> 
-                    </fieldset> 
+  #loading img {
+    width: 100px;
+    margin: 0 auto;
+    display: block;
+  }
+</style>
 
 
-                    <input type="hidden" name="totalCalories" id="totalCalories" value="">
+<main class="flex-shrink-0 main has-footer">
+  {% include 'header.html' %}
+  <!-- Fixed navbar -->
 
 
-                    <div id="us_imperical"> 
-                      <div class="form-group row">
-                        <label for="age" class="col-sm-2 col-form-label">Age</label>
-                        <div class="col-sm-10">
-                          <input type="number" class="form-control" id="age1" name="age1" placeholder="Ages 15-80">
-                        </div>
-                      </div>
-        
-                      <fieldset class="form-group">
-                        <div class="row">
-                          <legend class="col-form-label col-sm-2 pt-0">Gender</legend>
-                          <div class="col-sm-10" id="form-radio">
-                            <div class="custom-control custom-radio custom-control-inline">
-                              <input type="radio" id="male1" name="customRadioInline1" class="custom-control-input" value="male1" checked="checked">
-                              <label class="custom-control-label" for="male1">Male</label>
-                            </div>
-                            <div class="custom-control custom-radio custom-control-inline">
-                              <input type="radio" id="female1" name="customRadioInline1" class="custom-control-input" value="female1">
-                              <label class="custom-control-label" for="female1">Female</label>
-                            </div>  
-                          </div>
-                        </div> 
-                      </fieldset> 
-        
-                      <div class="form-group row">
-                        <label for="weight" class="col-sm-2 col-form-label">Weight</label>
-                        <div class="col-sm-10">
-                          <input type="number" class="form-control" id="weight1" name="weight1" placeholder="In Pounds">
-                        </div>
-                      </div>
+  <div class="container">
+    <div class="row">
+      <div class="col-lg-6 mx-auto">
+        <div class="card card-body text-center mt-5">
+          <h1 class="heading display-5 pb-3">Camera</h1>
 
-                      <div class="form-group row">
-                        <label for="weight" class="col-sm-2 col-form-label">Goal Weight</label>
-                        <div class="col-sm-10">
-                          <input type="number" class="form-control" id="goal_weight1" name="goal_weight1" placeholder="In Pounds">
-                        </div>
-                      </div>
-        
-                      <div class="form-group row">
-                        <label for="height" class="col-sm-2 col-form-label">Height</label>
-                        <div class="col-sm-5">
-                          <input type="number" class="form-control" id="feet" name="feet" placeholder="In Feet">
-                        </div>
-                        <div class="col-sm-5">
-                          <input type="number" class="form-control" id="inches" name="inches" placeholder="In Inches">
-                        </div>
-                      </div>
+          <div id="cameraPreview" style="width: auto; height: 350px;"></div>
 
-                      
-                      <div class="form-group row">
-                        <legend class="col-form-label col-sm-2 pt-0">Activity Level</legend>
-                        <select class="custom-select col-sm-10" id="list1" name="list1">
-                          <option selected value="1">Sedentary (little or no exercise)</option>
-                          <option value="2">Lightly active (light exercise/sports 1-3 days/week)</option>
-                          <option value="3">Moderately active (moderate exercise/sports 3-5 days/week)</option>
-                          <option value="4">Very active (hard exercise/sports 6-7 days a week)</option>
-                          <option value="5">Extra active (very hard exercise/sports & physical job or 2x training)</option>
-                        </select>
-                      </div>
-                    </div>
-
-                    
-
-                  <!--Metrics Calculate-->
-                    <div id="metric_calcualation">
-
-                        <div class="form-group row">
-                          <label for="age" class="col-sm-2 col-form-label">Age</label>
-                          <div class="col-sm-10">
-                            <input type="number" class="form-control" id="age2" name="age2" placeholder="Ages 15-80">
-                          </div>
-                        </div>
-          
-                        <fieldset class="form-group">
-                          <div class="row">
-                            <legend class="col-form-label col-sm-2 pt-0">Gender</legend>
-                            <div class="col-sm-10" id="form-radio">
-                              <div class="custom-control custom-radio custom-control-inline">
-                                <input type="radio" id="male2" name="customRadioInline2" class="custom-control-input" value="male2" checked="checked">
-                                <label class="custom-control-label" for="male2">Male</label>
-                              </div>
-                              <div class="custom-control custom-radio custom-control-inline">
-                                <input type="radio" id="female2" name="customRadioInline2" class="custom-control-input">
-                                <label class="custom-control-label" for="female2">Female</label>
-                              </div>  
-                            </div>
-                          </div> 
-                        </fieldset> 
-          
-                        <div class="form-group row">
-                          <label for="weight" class="col-sm-2 col-form-label">Weight</label>
-                          <div class="col-sm-10">
-                            <input type="number" class="form-control" id="weight2" name="weight2" placeholder="In kilograms">
-                          </div>
-                        </div>
-
-                        <div class="form-group row">
-                          <label for="weight" class="col-sm-2 col-form-label">Goal Weight</label>
-                          <div class="col-sm-10">
-                            <input type="number" class="form-control" id="goal_weight2" name="goal_weight2" placeholder="In kilograms">
-                          </div>
-                        </div>
-          
-                        <div class="form-group row">
-                          <label for="height" class="col-sm-2 col-form-label">Height</label>
-                          <div class="col-sm-10">
-                            <input type="number" class="form-control" id="height2" name="height2" placeholder="In centimeters">
-                          </div>
-                        </div>
-                        
-                        <div class="form-group row">
-                          <legend class="col-form-label col-sm-2 pt-0">Activity Level</legend>
-                          <select class="custom-select col-sm-10" id="list2" name="list2">
-                            <option selected value="1">Sedentary (little or no exercise)</option>
-                            <option value="2">Lightly active (light exercise/sports 1-3 days/week)</option>
-                            <option value="3">Moderately active (moderate exercise/sports 3-5 days/week)</option>
-                            <option value="4">Very active (hard exercise/sports 6-7 days a week)</option>
-                            <option value="5">Extra active (very hard exercise/sports & physical job or 2x training)</option>
-                          </select>
-                        </div>
-                      </div>
-
-                    </div>
-
-
-
-                    <div>
-                      <br>
-                      <div class="form-group">
-                        <input type="submit" value="Calculate" id="Calculate" class="btn btn-primary btn-block Calculate">
-                      </div>
-      
-                  
-      
-                      <div id="loading">
-                        <img src="{% static 'img/Loading.gif' alt='Loading' %}">
-                      </div>
-      
-                      <div id="results" class="pt-4">
-                        <h5>Results</h5>
-                          <div class="form-group">
-                            <div class="input-group">
-                              <input type="number" class="form-control" id="total-calories" name="total_calories" disabled>
-                            </div>
-                          </div>                       
-                          <div class="form-group">
-                            <button value="Next" class="btn btn-primary btn-block next" id="next">Next</button>
-                          </div>                    
-                      </div>
-                    </div>
-                </div>
-            </form>
+          <div class="form-group">
+            <input type="submit" value="Capture Image" id="captureBtn" class="btn btn-primary btn-block captureBtn">
           </div>
+
         </div>
       </div>
-{% endblock body %}
+    </div>
+    {% endblock body %}
 
 
 
 
 
 
-{% block script %}
+    {% block script %}
 
-<script>
-    /*
-document.getElementById('Calculate').addEventListener('submit', function(e){
-    document.getElementById('results').style.display = 'none';
-  
-    document.getElementById('loading').style.display = 'block';
-  
-    setTimeout(calculateCalories, 2000);
-  
-    e.preventDefault();
-  });
-*/
 
-  $(document).ready(function(){
-    $('#metric_calcualation').hide()
-  })
-
-  $(document).on('click', '#imperical', function(){
-    $('#metric_calcualation').hide()
-    $('#us_imperical').show()
-  })
+    <script>
+      $(document).ready(function() {
+        var video = document.createElement('video');
+        video.style.width = '100%';
+        video.style.height = 'auto';
+        video.autoplay = true;
     
-  
-  $(document).on('click', '#metric', function(){
-    $('#us_imperical').hide()
-    $('#metric_calcualation').show()
-  })
+        var cameraPreview = document.getElementById('cameraPreview');
+        cameraPreview.appendChild(video);
     
-
-  $('#Calculate').on('click', function(e){
-    document.getElementById('results').style.display = 'none';
-  
-    document.getElementById('loading').style.display = 'block';
-  
-    setTimeout(calculateCalories, 2000);
-  
-    e.preventDefault();
-  });
-
-
-  
-  function calculateCalories(e) {
+        navigator.mediaDevices.getUserMedia({
+            video: {
+                facingMode: {
+                    exact: "environment" // Use the back camera
+                }
+            }
+        })
+        .then(function(stream) {
+            video.srcObject = stream;
+        })
+        .catch(function(err) {
+            console.error('Error accessing the camera:', err);
+        });
     
-    const units = $('input[name="measurement"]:checked').next('label').text();
+        $('#captureBtn').click(function() {
+            var canvas = document.createElement('canvas');
+            canvas.width = video.videoWidth;
+            canvas.height = video.videoHeight;
+            var context = canvas.getContext('2d');
+            context.drawImage(video, 0, 0, canvas.width, canvas.height);
+            var imageDataURL = canvas.toDataURL('image/png');
     
-    if (units === "U.S. (Imperial)"){
-      const age = document.getElementById('age1');
-      const gender = document.querySelector('input[name="customRadioInline1"]:checked');
-      const weight = document.getElementById('weight1');
-      const activity = document.getElementById('list1').value;
-      const totalCalories = document.getElementById('total-calories');
-
-      if ($("#feet").val() !== ''){
-        var height = $("#feet").val()
-      }else if($("#inches").val()){
-        var height = $("#inches").val()
-      }else{
-        var height = $("#inches").val()
-      }
-      console.log(height)
-
-      if (age.value === '' || weight.value === '' || height === '' || 80 < age.value || age.value < 15) {
-        errorMessage('Please make sure the values you entered are correct');
-      } else if(gender.id === 'male' && activity === "1") {
-        totalCalories.value = parseFloat(1.2 * (66.5 + (13.75 * parseFloat(weight.value)) + (5.003 * parseFloat(height)) - (6.755 * parseFloat(age.value)))).toFixed(2);
-      } else if(gender.id === 'male' && activity === "2") {
-        totalCalories.value = parseFloat(1.375 * (66.5 + (13.75 * parseFloat(weight.value)) + (5.003 * parseFloat(height)) - (6.755 * parseFloat(age.value)))).toFixed(2);
-      } else if (gender.id === 'male' && activity === "3") {
-        totalCalories.value = parseFloat(1.55 * (66.5 + (13.75 * parseFloat(weight.value)) + (5.003 * parseFloat(height)) - (6.755 * parseFloat(age.value)))).toFixed(2);
-      } else if(gender.id === 'male' && activity === "4") {
-        totalCalories.value = parseFloat(1.725 * (66.5 + (13.75 * parseFloat(weight.value)) + (5.003 * parseFloat(height)) - (6.755 * parseFloat(age.value)))).toFixed(2);
-      } else if(gender.id === 'male' && activity === "5") {
-        totalCalories.value = parseFloat(1.9 * (66.5 + (13.75 * parseFloat(weight.value)) + (5.003 * parseFloat(height)) - (6.755 * parseFloat(age.value)))).toFixed(2)
-        ;
-      } else if(gender.id === 'female' && activity === "1") {
-        totalCalories.value = parseFloat(1.2 * (655 + (9.563 * parseFloat(weight.value)) + (1.850 * parseFloat(height)) - (4.676 * parseFloat(age.value)))).toFixed(2);
-      } else if(gender.id === 'female' && activity === "2") {
-        totalCalories.value = parseFloat(1.375 * (655 + (9.563 * parseFloat(weight.value)) + (1.850 * parseFloat(height)) - (4.676 * parseFloat(age.value)))).toFixed(2);
-      } else if(gender.id === 'female' && activity === "3") {
-        totalCalories.value = parseFloat(1.55 * (655 + (9.563 * parseFloat(weight.value)) + (1.850 * parseFloat(height)) - (4.676 * parseFloat(age.value)))).toFixed(2);
-      } else if(gender.id === 'female' && activity === "4") {
-        totalCalories.value = parseFloat(1.725* (655 + (9.563 * parseFloat(weight.value)) + (1.850 * parseFloat(height)) - (4.676 * parseFloat(age.value)))).toFixed(2);
-      } else {
-        totalCalories.value = parseFloat(1.9 * (655 + (9.563 * parseFloat(weight.value)) + (1.850 * parseFloat(height)) - (4.676 * parseFloat(age.value)))).toFixed(2);
-      } 
+            // Send captured image to Django backend
+            sendImageToDjango(imageDataURL);
+        });
     
-      document.getElementById('results').style.display = 'block';
+        function sendImageToDjango(imageDataURL) {
+            $.ajax({
+                url: '/upload-image/',
+                type: 'POST',
+                data: {
+                    image_data: imageDataURL
+                },
+                success: function(data) {
+                    console.log('Image uploaded successfully:', data);
+                    // Handle response from backend
+                },
+                error: function(xhr, textStatus, errorThrown) {
+                    console.error('Error uploading image:', errorThrown);
+                }
+            });
+        }
+    });
     
-      document.getElementById('loading').style.display = 'none';
-      displayNext();
-    }
+    </script>
 
-
-
-    else if (units === "Metric"){
-      const age = document.getElementById('age2');
-      const gender = document.querySelector('input[name="customRadioInline2"]:checked');
-      const weight = document.getElementById('weight2');
-      const height = document.getElementById('height2');
-      const activity = document.getElementById('list2').value;
-      const totalCalories = document.getElementById('total-calories');
-
-
-      if (age.value === '' || weight.value === '' || height.value === '' || 80 < age.value || age.value < 15) {
-        errorMessage('Please make sure the values you entered are correct');
-      } else if(gender.id === 'male' && activity === "1") {
-        totalCalories.value = parseFloat(1.2 * (66.5 + (13.75 * parseFloat(weight.value)) + (5.003 * parseFloat(height.value)) - (6.755 * parseFloat(age.value)))).toFixed(2);
-      } else if(gender.id === 'male' && activity === "2") {
-        totalCalories.value = parseFloat(1.375 * (66.5 + (13.75 * parseFloat(weight.value)) + (5.003 * parseFloat(height.value)) - (6.755 * parseFloat(age.value)))).toFixed(2);
-      } else if (gender.id === 'male' && activity === "3") {
-        totalCalories.value = parseFloat(1.55 * (66.5 + (13.75 * parseFloat(weight.value)) + (5.003 * parseFloat(height.value)) - (6.755 * parseFloat(age.value)))).toFixed(2);
-      } else if(gender.id === 'male' && activity === "4") {
-        totalCalories.value = parseFloat(1.725 * (66.5 + (13.75 * parseFloat(weight.value)) + (5.003 * parseFloat(height.value)) - (6.755 * parseFloat(age.value)))).toFixed(2);
-      } else if(gender.id === 'male' && activity === "5") {
-        totalCalories.value = parseFloat(1.9 * (66.5 + (13.75 * parseFloat(weight.value)) + (5.003 * parseFloat(height.value)) - (6.755 * parseFloat(age.value)))).toFixed(2)
-        ;
-      } else if(gender.id === 'female' && activity === "1") {
-        totalCalories.value = parseFloat(1.2 * (655 + (9.563 * parseFloat(weight.value)) + (1.850 * parseFloat(height.value)) - (4.676 * parseFloat(age.value)))).toFixed(2);
-      } else if(gender.id === 'female' && activity === "2") {
-        totalCalories.value = parseFloat(1.375 * (655 + (9.563 * parseFloat(weight.value)) + (1.850 * parseFloat(height.value)) - (4.676 * parseFloat(age.value)))).toFixed(2);
-      } else if(gender.id === 'female' && activity === "3") {
-        totalCalories.value = parseFloat(1.55 * (655 + (9.563 * parseFloat(weight.value)) + (1.850 * parseFloat(height.value)) - (4.676 * parseFloat(age.value)))).toFixed(2);
-      } else if(gender.id === 'female' && activity === "4") {
-        totalCalories.value = parseFloat(1.725* (655 + (9.563 * parseFloat(weight.value)) + (1.850 * parseFloat(height.value)) - (4.676 * parseFloat(age.value)))).toFixed(2);
-      } else {
-        totalCalories.value = parseFloat(1.9 * (655 + (9.563 * parseFloat(weight.value)) + (1.850 * parseFloat(height.value)) - (4.676 * parseFloat(age.value)))).toFixed(2);
-      } 
-
-      console.log(totalCalories.value + "Here")
-    
-      document.getElementById('results').style.display = 'block';
-    
-      document.getElementById('loading').style.display = 'none';
-      displayNext();
-    }
-  }
-  
-  function errorMessage(error) {
-    document.getElementById('results').style.display = 'none';
-    
-    document.getElementById('loading').style.display = 'none';
-    const errorDiv = document.createElement('div');
-    const card = document.querySelector('.card');
-    const heading = document.querySelector('.heading');
-    errorDiv.className = 'alert alert-danger';
-    errorDiv.appendChild(document.createTextNode(error));
-  
-    card.insertBefore(errorDiv, heading);
-  
-    setTimeout(clearError, 4000);
-  }
-  
-  function clearError() {
-    document.querySelector('.alert').remove();
-  }
-
-
-  function displayNext() {
-    var totalCalories = document.getElementById('total-calories').value;
-    console.log(totalCalories)
-  
-    if (totalCalories === '') {
-      document.getElementById('results').style.display = 'none';
-      document.getElementById('next').style.display = 'none';
-    } else {
-      document.getElementById('results').style.display = 'block';
-      document.getElementById('next').style.display = 'block';
-      $('#totalCalories').val(totalCalories);
-
-    }
-  }
-
-  
-</script>
-
-
-<!--Start of Tawk.to Script-->
-<script type="text/javascript">
-  var Tawk_API=Tawk_API||{}, Tawk_LoadStart=new Date();
-  (function(){
-  var s1=document.createElement("script"),s0=document.getElementsByTagName("script")[0];
-  s1.async=true;
-  s1.src='https://embed.tawk.to/64198c6631ebfa0fe7f3cddd/1gs1sot3p';
-  s1.charset='UTF-8';
-  s1.setAttribute('crossorigin','*');
-  s0.parentNode.insertBefore(s1,s0);
-  })();
-  </script>
-  <!--End of Tawk.to Script-->
-{% endblock script %}
+    <!--Start of Tawk.to Script-->
+    <script type="text/javascript">
+      var Tawk_API = Tawk_API || {}, Tawk_LoadStart = new Date(); 
+      (function () {
+        var s1 = document.createElement("script"), s0 = document.getElementsByTagName("script")[0];
+        s1.async = true;
+        s1.src = 'https://embed.tawk.to/64198c6631ebfa0fe7f3cddd/1gs1sot3p';
+        s1.charset = 'UTF-8';
+        s1.setAttribute('crossorigin', '*');
+        s0.parentNode.insertBefore(s1, s0);
+      })();
+    </script>
+    <!--End of Tawk.to Script-->
+    {% endblock script %}

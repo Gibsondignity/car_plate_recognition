@@ -53,8 +53,8 @@ def profile(request):
 def home(request):
     
     user = request.user
-    user_calorie = UserCalorie.objects.filter(user=user).last()
-    context = {'user_calorie':user_calorie}
+    reports = reportedCar.objects.filter(reported_by=user).all().order_by('-id')
+    context = {'reports':reports}
     return render(request, 'dashboard/home.html', context)
 
 

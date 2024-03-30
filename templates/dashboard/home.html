@@ -3,141 +3,148 @@
 
 
 {% block body %}
-    <style>
-        .grid{
-            width: 90%; 
-            margin: 10px; 
-            padding:50px; 
-            display: grid; 
-            grid-template-columns: 30% 70%;
-            
-        }
+<style>
+    .grid {
+        width: 90%;
+        margin: 10px;
+        padding: 50px;
+        display: grid;
+        grid-template-columns: 30% 70%;
 
-        .calorie{
-            width: 90%; 
-            margin: 10px; 
-            padding:50px; 
-            
-        }
+    }
 
-        #table {
-            font-family: Arial, Helvetica, sans-serif;
-            border-collapse: collapse;
-            width: 100%;
-          }
-          
-          #table td, #table th {
-            border: 1px solid #ddd;
-            padding: 8px;
-          }
-          
-          #table tr:nth-child(even){background-color: #f2f2f2;}
-          
-          #table tr:hover {background-color: #ddd;}
-          
-          #table th {
-            padding-top: 12px;
-            padding-bottom: 12px;
-            text-align: left;
-            background-color: #04AA6D;
-            color: white;
-          }
+    .calorie {
+        width: 90%;
+        margin: 10px;
+        padding: 50px;
 
-    </style>
+    }
 
-    <main class="flex-shrink-0 main has-footer">
-        {% include 'header.html' %}
-        <!-- Fixed navbar -->
-        <h3 style="color: #fff; text-align: center; margin-top: 10px; margin-bottom: 10px">Hello, {{request.user}}!</h3>
+    #table {
+        font-family: Arial, Helvetica, sans-serif;
+        border-collapse: collapse;
+        width: 100%;
+    }
+
+    #table td,
+    #table th {
+        border: 1px solid #ddd;
+        padding: 8px;
+    }
+
+    #table tr:nth-child(even) {
+        background-color: #f2f2f2;
+    }
+
+    #table tr:hover {
+        background-color: #ddd;
+    }
+
+    #table th {
+        padding-top: 12px;
+        padding-bottom: 12px;
+        text-align: left;
+        background-color: #04AA6D;
+        color: white;
+    }
+</style>
+
+<main class="flex-shrink-0 main has-footer">
+    {% include 'header.html' %}
+    <!-- Fixed navbar -->
+    <h3 style="color: #fff; text-align: center; margin-top: 10px; margin-bottom: 10px">Hello, {{request.user}}!</h3>
 
 
-        <center>
-            <div class="card grid">
-                <div>
-                    <img src="{% static 'img/calories-calculator.png' %}" alt="weight" width="100px" height="100px">
-                </div>
-                <div>
-                    <h5>Goal Weight</h5>
-                    <h1>{{user_calorie.desired_weight}}</h1>
-                </div>
+    <center>
+        <div class="card grid">
+            <div>
+                <img src="{% static 'img/calories-calculator.png' %}" alt="weight" width="100px" height="100px">
             </div>
-
-
-            <div class="card calorie">
-                <div>
-                    <table id="table">
-                        <tr>
-                            <td>Calorie to Maintain</td>
-                            <td>{{user_calorie.maintenance_calorie}}</td>
-                        </tr>
-                        <tr>
-                            <td>Calorie to Eat</td>
-                            <td>{{user_calorie.calorie_to_eat}}</td>
-                        </tr>
-                        <tr>
-                            <td>Calorie to Gain</td>
-                            <td>{{user_calorie.calorie_to_gain}}</td>
-                        </tr>
-                    </table>
-                </div>
-                
+            <div>
+                <h5>Goal Weight</h5>
+                <h1>{{user_calorie.desired_weight}}</h1>
             </div>
+        </div>
 
-            <div class="card calorie">
-                
-                <h5>Search Number Plate</h5>
-                <form id="calorie-form" method="POST" action="{% url 'camera' %}">
-                    {% csrf_token %}
 
-                    <div class="form-group row">
-                      <label for="age" class="col-sm-2 col-form-label">Car Number</label>
-                      <div class="col-sm-10">
+        <div class="card calorie">
+
+            <h5>Search Number Plate</h5>
+            <form id="calorie-form" method="POST" action="{% url 'camera' %}">
+                {% csrf_token %}
+
+                <div class="form-group row">
+                    <label for="age" class="col-sm-2 col-form-label">Car Number</label>
+                    <div class="col-sm-10">
                         <input type="text" class="form-control" id="food" name="food" placeholder="4671-24">
-                      </div>
                     </div>
-      
-                    
-                    <div class="form-group">
-                      <input type="submit" value="Check" id="Calculate" class="btn btn-primary btn-block Calculate">
-                    </div>
-      
-                  
-      
-                  <div id="loading">
+                </div>
+
+
+                <div class="form-group">
+                    <input type="submit" value="Check" id="Calculate" class="btn btn-primary btn-block Calculate">
+                </div>
+
+
+
+                <div id="loading">
                     <img src="{% static 'img/Loading.gif' alt='Loading' %}">
-                  </div>
-      
-                  <div id="results" class="pt-4">
+                </div>
+
+                <div id="results" class="pt-4">
                     <h5>Results</h5>
                     <div class="form-group">
-                      <div class="input-group">
-                        <input type="text" class="form-control" id="total-calories" name="total_calories" disabled>
-                      </div>
-                    </div>                       
-                                       
-                  </div>
+                        <div class="input-group">
+                            <input type="text" class="form-control" id="total-calories" name="total_calories" disabled>
+                        </div>
+                    </div>
+
                 </div>
-            </form>
+        </div>
+        </form>
+        </div>
+
+
+        <div class="card calorie">
+            <h5>Recent Reports</h5>
+            <div>
+                <table id="table">
+                    <tr>
+                        <th>Car Number</th>
+                        <th>Date and Time</th>
+                    </tr>
+                    {% for report in reports %}
+                        <tr>
+                            <td>{{report.car_number}}</td>
+                            <td>{{report.reported_date}}</td>
+                        </tr>
+                    {% endfor %}
+                    
+                </table>
             </div>
-        </center>
 
-{% endblock body %}
+        </div>
+
+        
+    </center>
+
+    {% endblock body %}
 
 
-{% block script %}
+    {% block script %}
 
     <script src="https://code.jquery.com/jquery-3.5.1.min.js"></script>
     <script>
-        $(document).ready(function() {
-            $('#captureBtn').click(function() {
+        $(document).ready(function () {
+            $('#captureBtn').click(function () {
                 $('#imageInput').click(); // Trigger file input click
             });
 
-            $('#imageInput').change(function(e) {
+            $('#imageInput').change(function (e) {
                 var file = e.target.files[0];
                 if (file) {
                     var reader = new FileReader();
-                    reader.onload = function() {
+                    reader.onload = function () {
                         var imageDataURL = reader.result;
                         // Send captured image to Django backend
                         sendImageToDjango(imageDataURL);
@@ -154,12 +161,12 @@
                     data: {
                         image_data: imageDataURL
                     },
-                    success: function(data) {
+                    success: function (data) {
                         // Handle response from backend
                         console.log(data);
                         // Update UI with OCR result if needed
                     },
-                    error: function(xhr, textStatus, errorThrown) {
+                    error: function (xhr, textStatus, errorThrown) {
                         console.error('Error:', errorThrown);
                     }
                 });
@@ -168,46 +175,46 @@
     </script>
     <script>
 
-        $(document).ready(function() {
-            $('#Calculate').click(function(e) {
+        $(document).ready(function () {
+            $('#Calculate').click(function (e) {
                 e.preventDefault();
                 var food = $('#food').val();
                 var appId = 'a327dcd3';
                 var appKey = '13a29aa0f8a09ef879dc0808ead148ce';
                 $('#loading').show();
                 $('#results').hide();
-            
+
                 // Call Edamam API
-                $.getJSON('https://api.edamam.com/api/food-database/parser?ingr=' + food + '&app_id=' + appId + '&app_key=' + appKey, function(data) {
+                $.getJSON('https://api.edamam.com/api/food-database/parser?ingr=' + food + '&app_id=' + appId + '&app_key=' + appKey, function (data) {
                     // Get the first result
-                var result = data.hints[0];
-            
+                    var result = data.hints[0];
+
                     // Get the number of calories
-                var calories = result.food.nutrients.ENERC_KCAL;
-                console.log(calories)
+                    var calories = result.food.nutrients.ENERC_KCAL;
+                    console.log(calories)
                     // Display the number of calories
-                $('#loading').hide();
-                $('#results').show();
-                $('#total-calories').val(food +":  " + calories);
+                    $('#loading').hide();
+                    $('#results').show();
+                    $('#total-calories').val(food + ":  " + calories);
+                });
             });
         });
-    });
 
 
     </script>
 
 
     <!--Start of Tawk.to Script-->
-<script type="text/javascript">
-    var Tawk_API=Tawk_API||{}, Tawk_LoadStart=new Date();
-    (function(){
-    var s1=document.createElement("script"),s0=document.getElementsByTagName("script")[0];
-    s1.async=true;
-    s1.src='https://embed.tawk.to/64198c6631ebfa0fe7f3cddd/1gs1sot3p';
-    s1.charset='UTF-8';
-    s1.setAttribute('crossorigin','*');
-    s0.parentNode.insertBefore(s1,s0);
-    })();
+    <script type="text/javascript">
+        var Tawk_API = Tawk_API || {}, Tawk_LoadStart = new Date();
+        (function () {
+            var s1 = document.createElement("script"), s0 = document.getElementsByTagName("script")[0];
+            s1.async = true;
+            s1.src = 'https://embed.tawk.to/64198c6631ebfa0fe7f3cddd/1gs1sot3p';
+            s1.charset = 'UTF-8';
+            s1.setAttribute('crossorigin', '*');
+            s0.parentNode.insertBefore(s1, s0);
+        })();
     </script>
     <!--End of Tawk.to Script-->
-{% endblock script %}
+    {% endblock script %}
