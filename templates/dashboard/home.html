@@ -56,12 +56,12 @@
 
 
     <center>
-        <div class="card grid">
+        <div class="card grid" style="background: url({% static 'img/Volta-River-Authority.png' %})">
             <div>
-                <img src="{% static 'img/calories-calculator.png' %}" alt="weight" width="100px" height="100px">
+                {% comment %} <img src="{% static 'img/Volta-River-Authority.png' %}" alt="weight" width="100px" height="100px"> {% endcomment %}
             </div>
             <div>
-                <h5>Goal Weight</h5>
+                {% comment %} <h5>Goal Weight</h5> {% endcomment %}
                 <h1>{{user_calorie.desired_weight}}</h1>
             </div>
         </div>
@@ -111,7 +111,7 @@
                 <table id="table">
                     <tr>
                         <th>Car Number</th>
-                        <th>Date and Time</th>
+                        <th>Report Date</th>
                     </tr>
                     {% for report in reports %}
                         <tr>
