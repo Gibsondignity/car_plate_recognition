@@ -1,0 +1,44 @@
+{% load static %}
+<!-- Required jquery and libraries -->
+<script src="{% static 'js/jquery-3.3.1.min.js' %}"></script>
+<script src="{% static 'js/popper.min.js' %}"></script>
+<script src="{% static 'vendor/bootstrap/js/bootstrap.min.js' %}"></script>
+
+<!-- cookie js -->
+<script src="{% static 'js/jquery.cookie.js' %}"></script>
+
+<!-- Swiper slider  js -->
+<script src="{% static 'vendor/swiper/js/swiper.min.js' %}"></script>
+
+<!-- Customized jquery file  -->
+<script src="{% static 'js/main.js' %}"></script>
+<script src="{% static 'js/color-scheme-demo.js' %}"></script>
+
+
+<!-- page level custom script -->
+<script src="{% static 'js/app.js' %}"></script>
+
+<script src="{% static 'toastr/toastr.min.js' %}"></script>
+
+
+
+<script>
+    $(function(){
+      /** add active class and stay opened when selected */
+      var url = window.location;
+    
+      // for sidebar menu entirely but not cover treeview
+      $('nav-link a').filter(function() {
+          return this.href == url;
+      }).parent().addClass('active');
+    
+    
+    });
+    </script>
+   {% if messages %}
+      {% for message in messages  %}
+        <script>
+            toastr.{{ message.tags }}('{{ message }}', '{{ message.tags|title }}');
+        </script>
+      {% endfor %}
+  {% endif %}

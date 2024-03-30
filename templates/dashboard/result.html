@@ -1,0 +1,245 @@
+{% extends 'root.html' %}
+{% load static %}
+
+
+{% block body %}
+    <style>
+        .grid{
+            width: 90%; 
+            margin: 10px; 
+            padding:50px; 
+            display: grid; 
+            grid-template-columns: 30% 70%;
+            
+        }
+
+        .calorie{
+            width: 90%; 
+            margin: 10px; 
+            padding:50px; 
+            
+        }
+
+        #table {
+            font-family: Arial, Helvetica, sans-serif;
+            border-collapse: collapse;
+            width: 100%;
+          }
+          
+          #table td, #table th {
+            border: 1px solid #ddd;
+            padding: 8px;
+          }
+          
+          #table tr:nth-child(even){background-color: #f2f2f2;}
+          
+          #table tr:hover {background-color: #ddd;}
+          
+          #table th {
+            padding-top: 12px;
+            padding-bottom: 12px;
+            text-align: left;
+            background-color: #04AA6D;
+            color: white;
+          }
+
+    </style>
+
+    <main class="flex-shrink-0 main has-footer">
+        {% include 'header.html' %}
+        <!-- Fixed navbar -->
+        <center>
+            <div class="card calorie">
+                <div>
+                    <table id="table">
+                        <h6>Your Maintenance Calories</h6>
+                        <tr>
+                            <td>Calorie to Maintain</td>
+                            <td>{{maintenance_calories}}</td>
+                        </tr>
+                        <tr>
+                            <td>Calorie to Eat</td>
+                            <td>{{calories_to_eat}}</td>
+                        </tr>
+                        <tr>
+                            <td>Calorie to Gain</td>
+                            <td>{{calories_to_gain}}</td>
+                        </tr>
+                    </table>
+                </div>
+                
+            </div>
+
+
+            <div class="card calorie">
+                <div>
+                    <table id="table">
+                        <h6>Grocery List</h6>
+                        {% for grocery_list in grocery_lists %}
+                            <tr>
+                                <td>Foods to Eat</td>
+                                <td>{{grocery_list.name}}</td>
+                                <td><button>${{grocery_list.price}} Buy</button></td>
+                            </tr>
+                        {% endfor %}
+                    </table>
+                </div>
+            </div>
+
+            
+            <div class="card calorie">
+                <div>
+                    <table id="table">
+                        <h6>Calorie In Common Foods</h6>
+                        {% for calorie_in_common_food in calorie_in_common_foods %}
+                            <tr>
+                                <td>Calorie to Maintain</td>
+                                <td>{{calorie_in_common_food}}</td>
+                            </tr>
+                        {% endfor %}
+                    </table>
+                </div>
+            </div>
+
+            
+            <div class="card calorie">
+                <div>
+                    <table id="table">
+                        <h6>Calorie Meal Plans</h6>
+                        {% for calorie_meal_plan in calorie_meal_plans %}
+                            <tr>
+                                <td>Calorie to Maintain</td>
+                                <td>{{calorie_meal_plan}}</td>
+                            </tr>
+                        {% endfor %}
+                    </table>
+                </div>
+            </div>
+
+            
+            <div class="card calorie">
+                <div>
+                    <table id="table">
+                        <h6>Common Exercises</h6>
+                        {% for common_exercise in common_exercises %}
+                            <tr>
+                                <td>Calorie to Maintain</td>
+                                <td>{{common_exercise}}</td>
+                            </tr>
+                        {% endfor %}
+                    </table>
+                </div>
+            </div>
+
+            
+            <div class="card calorie">
+                <div>
+                    <table id="table">
+                        <h6>Common Food Components</h6>
+                        {% for common_food_component in common_food_components %}
+                        <tr>
+                            <td>Calorie to Maintain</td>
+                            <td>{{common_food_component}}</td>
+                        </tr>
+                        {% endfor %}
+                    </table>
+                </div>
+            </div>
+            <div class="card calorie">
+                <div>
+                    <table id="table">
+                        <h6>NB:</h6>
+                        <p>
+                            The recommended daily calorie intake for an adult varies based on factors such as 
+                            age, gender, height, weight, and activity level. However, on average, an adult 
+                            male requires around 2500-3000 calories per day, while an adult female requires 
+                            around 2000-2500 calories per day.
+                        </p>
+                    </table>
+                </div>
+            </div>
+        </center>
+{% endblock body %}
+
+
+{% block script %}
+    <script>
+        /*
+        $(document).ready(function(){
+            $('#loading').hide();
+            $('#results').hide();
+            $('#next').hide();
+            $('#Calculate').click(function(e){
+                e.preventDefault();
+                $('#loading').show();
+                $('#results').hide();
+                $('#next').hide();
+                var food = $('#food').val();
+                $.ajax({
+                    url: "",
+                    type: "POST",
+                    data: {
+                        food: food,
+                        csrfmiddlewaretoken: '{{ csrf_token }}'
+                    },
+                    success: function(response){
+                        $('#loading').hide();
+                        $('#results').show();
+                        $('#next').show();
+                        $('#total-calories').val(response.total_calories);
+                    },
+                    error: function(response){
+                        console.log(response);
+                    }
+                });
+            });
+        });
+        */
+        // The number of calories in a food
+        
+
+        $(document).ready(function() {
+            $('#Calculate').click(function(e) {
+                e.preventDefault();
+                var food = $('#food').val();
+                var appId = 'a327dcd3';
+                var appKey = '13a29aa0f8a09ef879dc0808ead148ce';
+                $('#loading').show();
+                $('#results').hide();
+            
+                // Call Edamam API
+                $.getJSON('https://api.edamam.com/api/food-database/parser?ingr=' + food + '&app_id=' + appId + '&app_key=' + appKey, function(data) {
+                    // Get the first result
+                var result = data.hints[0];
+            
+                    // Get the number of calories
+                var calories = result.food.nutrients.ENERC_KCAL;
+                console.log(calories)
+                    // Display the number of calories
+                $('#loading').hide();
+                $('#results').show();
+                $('#total-calories').val(food +":  " + calories);
+            });
+        });
+    });
+
+
+    </script>
+
+
+
+    <!--Start of Tawk.to Script-->
+    <script type="text/javascript">
+        var Tawk_API=Tawk_API||{}, Tawk_LoadStart=new Date();
+        (function(){
+        var s1=document.createElement("script"),s0=document.getElementsByTagName("script")[0];
+        s1.async=true;
+        s1.src='https://embed.tawk.to/64198c6631ebfa0fe7f3cddd/1gs1sot3p';
+        s1.charset='UTF-8';
+        s1.setAttribute('crossorigin','*');
+        s0.parentNode.insertBefore(s1,s0);
+        })();
+    </script>
+    <!--End of Tawk.to Script-->
+
+{% endblock script %}

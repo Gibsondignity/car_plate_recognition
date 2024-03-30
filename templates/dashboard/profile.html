@@ -1,0 +1,155 @@
+{% extends 'root.html' %}
+{% load static %}
+
+
+{% block body %}
+
+    <main class="flex-shrink-0 main has-footer">
+        <!-- Fixed navbar -->
+        {% include 'header.html' %}
+
+        <!-- page content start -->
+        <div class="container-fluid px-0">
+            <div class="card overflow-hidden">
+                <div class="card-body p-0 h-150">
+                    <div class="background">
+                        <img src="{% static 'img/car_plate.jpg' %}" alt="" style="display: none;">
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="container-fluid top-70 text-center mb-4">
+            <div class="avatar avatar-140 rounded-circle mx-auto shadow">
+                <div class="background">
+                    <img src="{% static 'img/profile.png' %}" alt="">
+                </div>
+            </div>
+        </div>
+
+        <div class="container mb-4 text-center text-white">
+            <h6 class="mb-1">{{request.user.username}}</h6>
+        </div>
+
+        <div class="main-container">
+            
+            {% for message in messages %}
+                <div class="alert alert-{{ message.tags }} mb-0 alert-dismissible fade show btn-danger" role="alert">
+                    <strong>Message: </strong> {{ message }}
+                    <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                </div>
+            {% endfor %}
+
+            <form action="{% url 'profile' %}" method="post" enctype="multipart/form-data">
+                {% csrf_token %}
+                <div class="container">
+                    <div class="card">
+                        <div class="card-header">
+                            {% if request.user.first_name and request.user.second_name and request.user.phone %}
+                                <h6 class="mb-0">Profile</h6>
+                            {% else %}
+                                <h6 class="mb-0">Please Complete Your Profile</h6>
+                            {% endif %}
+                        </div>
+
+                        <div class="card-body px-0 pt-0">
+                            <div class="list-group list-group-flush border-top border-color">
+                                
+                                <div class="row">
+                                    <div class="col-auto">
+                                        
+                                    </div>
+                                    <div class="col align-self-center pl-0 mt-3">
+                                        <h6 class="mb-1">First Name</h6>
+                                        {{ profile_form.first_name }}
+                                    </div>
+                                </div>
+                                
+                                
+                                <div class="row">
+                                    <div class="col-auto">
+                                        
+                                    </div>
+                                    <div class="col align-self-center pl-0 mt-3">
+                                        <h6 class="mb-1">Last Name</h6>
+                                        {{ profile_form.second_name }}
+                                    </div>
+                                </div>
+                                
+                                
+                                <div class="row">
+                                    <div class="col-auto">
+                                        
+                                    </div>
+                                    <div class="col align-self-center pl-0 mt-3">
+                                        <h6 class="mb-1">Phone</h6>
+                                        {{ profile_form.phone }}
+                                    </div>
+                                </div>
+                                
+
+                                <div class="row">
+                                    <div class="col-auto">
+                                    
+                                    </div>
+                                    <div class="col align-self-center pl-0 mt-4">
+                                        <h6 class="mb-1">Answer Security Question</h6>
+                                        
+                                    </div>
+                                </div>
+
+                                <div class="row">
+                                    <div class="col-auto">
+                                    </div>
+                                    <div class="col align-self-center pl-0 mt-2">
+                                        <h6 class="mb-1">Security Question</h6>
+                                        {{security_form.question}}
+                                    </div>
+                                </div>
+                                
+
+                                
+                                <div class="row">
+                                    <div class="col-auto">
+                                        
+                                    </div>
+                                    <div class="col align-self-center pl-0 mt-3">
+                                        <h6 class="mb-1">Answer</h6>
+                                        {{security_form.answer_text}}
+                                    </div>
+                                </div>
+
+                                <div class="row">
+                                    <div class="col-auto">
+                                        
+                                    </div>
+                                    <div class="col align-self-center pl-0 mt-4">
+                                        <button class="btn btn-default rounded btn-block">Save</button>
+                                    </div>
+                                </div>
+
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </form>
+
+        </div>
+    </main>
+
+
+    <!--Start of Tawk.to Script-->
+    <script type="text/javascript">
+        var Tawk_API=Tawk_API||{}, Tawk_LoadStart=new Date();
+        (function(){
+        var s1=document.createElement("script"),s0=document.getElementsByTagName("script")[0];
+        s1.async=true;
+        s1.src='https://embed.tawk.to/64198c6631ebfa0fe7f3cddd/1gs1sot3p';
+        s1.charset='UTF-8';
+        s1.setAttribute('crossorigin','*');
+        s0.parentNode.insertBefore(s1,s0);
+        })();
+    </script>
+    <!--End of Tawk.to Script-->
+{% endblock body %}

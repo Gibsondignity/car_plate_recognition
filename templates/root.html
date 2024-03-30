@@ -1,0 +1,117 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    {% include 'head.html' %} 
+    <title>CAR NUMBER PLATE RECOGNITION</title>
+</head>
+    <body class="body-scroll d-flex flex-column h-100 menu-overlay">
+        <!-- screen loader -->
+        <div class="container-fluid h-100 loader-display">
+            <div class="row h-100">
+                <div class="align-self-center col">
+                    <div class="logo-loading">
+                        <div class="icon icon-100 mb-4 rounded-circle">
+                            <img src="img/favicon144.png" alt="" class="w-100">
+                        </div>
+                        <h4 class="text-default">WELCOME TO</h4>
+                        <p class="text-secondary">CAR NUMBER PLATE RECOGNITION</p>
+                        <div class="loader-ellipsis">
+                            <div></div>
+                            <div></div>
+                            <div></div>
+                            <div></div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    
+    
+    
+        <!-- menu main -->
+        <div class="main-menu">
+            <div class="row mb-4 no-gutters">
+                <div class="col-auto"><button class="btn btn-link btn-40 btn-close text-white"><span class="material-icons">chevron_left</span></button></div>
+                <div class="col-auto">
+                    <div class="avatar avatar-40 rounded-circle position-relative">
+                        <figure class="background">
+                            <img src="img/user1.png" alt="">
+                        </figure>
+                    </div>
+                </div>
+                <div class="col pl-3 text-left align-self-center">
+                    <h6 class="mb-1">{{request.user.name}}</h6>
+                </div>
+            </div>
+            <div class="menu-container">
+                <div class="row mb-4">
+                    
+                    
+                </div>
+    
+                {% if request.user.is_authenticated %}
+                <ul class="nav nav-pills flex-column ">
+                    <li class="nav-item">
+                        <a class="nav-link active" href="{% url 'home' %}">
+                            <div>
+                                <span class="material-icons icon">home</span>
+                                Home
+                            </div>
+                            <span class="arrow material-icons">chevron_right</span>
+                        </a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="{% url 'camera' %}">
+                            <div>
+                                <span class="material-icons icon">
+                                    camera
+                                </span>
+                                Scan
+                            </div>
+                            <span class="arrow material-icons">chevron_right</span>
+                        </a>
+                    </li>
+                    
+                    <li class="nav-item">
+                        <a class="nav-link" href="#">
+                            <div>
+                                <span class="material-icons icon">chat</span>
+                                Chats
+                            </div>
+                            <span class="arrow material-icons">chevron_right</span>
+                        </a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="{% url 'profile' %}">
+                            <div>
+                                <span class="material-icons icon">account_circle</span>
+                                Profile
+                            </div>
+                            <span class="arrow material-icons">chevron_right</span>
+                        </a>
+                    </li>
+                    
+                </ul>
+                
+
+                <div class="text-center">
+                    <a href="{% url 'logout' %}" class="btn btn-outline-danger text-white rounded my-3 mx-auto">Sign out</a>
+                </div>
+                {% endif %}
+            </div>
+        </div>
+        <div class="backdrop"></div>
+    
+    {% block body %}
+
+    {% endblock body %}
+
+    {% include 'footer.html' %}
+    {% include 'script.html' %}
+
+    {% block script %}
+
+    {% endblock script %}
+</body>
+</html>

@@ -1,0 +1,214 @@
+{% load static %}
+<!doctype html>
+<html lang="en" class="h-100">
+
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+    <meta name="description" content="">
+    <meta name="author" content="">
+    <meta name="generator" content="">
+    <title>Sign Up</title>
+
+    <!-- manifest meta -->
+    <meta name="apple-mobile-web-app-capable" content="yes">
+
+    <!-- Favicons -->
+    {% comment %} <link rel="apple-touch-icon" href="{% static 'img/favicon180.png' %}" sizes="180x180">
+    <link rel="icon" href="{% static 'img/favicon32.png' %}" sizes="32x32" type="image/png">
+    <link rel="icon" href="{% static 'img/favicon16.png' %}" sizes="16x16" type="image/png"> {% endcomment %}
+
+    <!-- Material icons-->
+    <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
+
+    <!-- Google fonts-->
+    <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@300;400;500&display=swap" rel="stylesheet">
+
+    <!-- swiper CSS -->
+    <link href="{% static 'vendor/swiper/css/swiper.min.css' %}" rel="stylesheet">
+
+    <!-- Custom styles for this template -->
+    <link href="{% static 'css/style.css' %}" rel="stylesheet" id="style">
+</head>
+
+<body class="body-scroll d-flex flex-column h-100 menu-overlay">
+    <!-- screen loader -->
+    <div class="container-fluid h-100 loader-display">
+        <div class="row h-100">
+            <div class="align-self-center col">
+                <div class="logo-loading">
+                    <div class="icon icon-100 mb-4 rounded-circle">
+                        {% comment %} <img src="{% static 'img/favicon144.png' %}" alt="" class="w-100"> {% endcomment %}
+                    </div>
+                    <h4 class="text-default">WELCOME TO</h4>
+                    <p class="text-secondary">CAR NUMBER PLATE RECOGNITION</p>
+                    <div class="loader-ellipsis">
+                        <div></div>
+                        <div></div>
+                        <div></div>
+                        <div></div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+
+
+
+    <!-- Begin page content -->
+    <main class="flex-shrink-0 main has-footer">
+        <!-- Fixed navbar -->
+        <header class="header">
+            <div class="row">
+                <div class="col-auto px-0">
+                    <button class="menu-btn btn btn-40 btn-link back-btn" type="button">
+                        <span class="material-icons">keyboard_arrow_left</span>
+                    </button>
+                </div>
+                <div class="text-left col align-self-center">
+
+                </div>
+                <div class="ml-auto col-auto align-self-center">
+                    <a href="{% url 'accounts' %}" class="text-white">
+                        Sign In
+                    </a>
+                </div>
+            </div>
+        </header>
+
+ 
+        <form method="POST" action="{% url 'register' %}" >
+
+            {% csrf_token %}
+            <div class="container h-100 text-white">
+                <div class="row h-100">
+                    <div class="col-12 align-self-center mb-4">
+                        <div class="row justify-content-center">
+                            <div class="col-11 col-sm-7 col-md-6 col-lg-5 col-xl-4">
+                                <h2 class="font-weight-normal mb-5">Create new<br>account with us</h2>
+                                <center>
+                                    {% if messages %}
+                                    {% for message in messages  %}
+                                        <p style="color: red;">{{ message }}</p>
+                                    {% endfor %}
+                                    {% endif %}
+                                </center>
+                                <div class="form-group float-label active">
+                                    <input type="text" class="form-control text-white" name="{{form.username.name}}" value="" required>
+                                    <label class="form-control-label text-white" >Username</label>
+                                    <span class="username_message" style="color: red;"></span>
+                                </div>
+                                <div class="form-group float-label position-relative">
+                                    <input type="password" class="form-control text-white" name="{{form.password.name}}" required>
+                                    <label class="form-control-label text-white">Password</label>
+                                    <span class="pass_message" style="color: red;"></span>
+                                </div>
+                                <div class="form-group float-label position-relative">
+                                    <input type="password" class="form-control text-white" name="confirm_password" required>
+                                    <label class="form-control-label text-white">Confirm Password</label>
+                                    <span class="confirm_pass_message" style="color: red;"></span>
+                                </div>
+                                <div class="form-group float-label position-relative">
+                                    <div class="custom-control custom-switch">
+                                        <input type="checkbox" class="custom-control-input" id="customSwitch1">
+                                        <label class="custom-control-label" for="customSwitch1">Remember Me</label>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                </div>
+            </div>
+        </main>
+
+
+        <!-- footer-->
+        <div class="footer no-bg-shadow py-3">
+            <div class="row justify-content-center">
+                <div class="col">
+                    <button class="btn btn-default rounded btn-block">Sign up</button>
+                </div>
+            </div>
+        </div>
+
+    </form>
+
+
+    <!-- Required jquery and libraries -->
+    <script src="{% static 'js/jquery-3.3.1.min.js' %}"></script>
+    <script src="{% static 'js/popper.min.js' %}"></script>
+    <script src="{% static 'vendor/bootstrap/js/bootstrap.min.js' %}"></script>
+
+    <!-- cookie js -->
+    <script src="{% static 'js/jquery.cookie.js' %}"></script>
+
+    <!-- Swiper slider  js-->
+    <script src="{% static 'vendor/swiper/js/swiper.min.js' %}"></script>
+
+    <!-- Customized jquery file  -->
+    <script src="{% static 'js/main.js' %}"></script>
+    <script src="{% static 'js/color-scheme-demo.js' %}"></script>
+
+
+    <!-- page level custom script -->
+    <script src="{% static 'js/app.js' %}"></script>
+
+    <script>
+    
+        $(document).on('click', '.btn-block', function(e){
+            var username = $('input[name=username]').val();
+            var password = $('input[name=password]').val();
+            var confirm_password = $('input[name=confirm_password]').val();
+
+            //console.log(username, password, confirm_password)
+
+            if (username == ''){
+                $(".username_message").html("Username is required");
+                return false;
+            }else{
+                $('.username_message').html("");
+            }
+
+            if (password == ''){
+                $('.pass_message').html("Password is required");
+                return false;
+            }else{
+                $('.pass_message').html("");
+            }
+
+            if (password.length < 6){
+                $('.pass_message').html("Password must be at least 6 characters");
+                return false;
+            }
+
+            if (/^\d+$/.test(password)){
+                $('.pass_message').html("Password must contain at least one letter");
+                return false;
+            }
+
+            if (/^[a-zA-Z]+$/.test(password)) {
+                $('.pass_message').html("Password must contain at least one number");
+                return false;
+            }
+
+            if (confirm_password == ''){
+                $(".confirm_pass_message").html("Confirm Password is required");
+                return false;
+            }else{
+                $('.confirm_pass_message').html("");
+            }
+
+            if (password != confirm_password){
+                $('.pass_message').html("Passwords Don't Match");
+                $('.confirm_pass_message').html("Passwords Don't Match");
+                //confirm_password.setCustomValidity("Passwords Don't Match");
+                return false;
+            }
+        })
+    </script>
+
+</body>
+
+</html>
