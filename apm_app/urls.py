@@ -11,6 +11,7 @@ urlpatterns = [
     path('chat', views.chat, name="chat"),
     path('searchCarNumber', views.searchCarNumber, name="searchCarNumber"),
     path('process_image', views.process_image, name="process_image"),
+    path('recentReportedCars', views.recentReportedCars, name="recentReportedCars"),
     
     
     

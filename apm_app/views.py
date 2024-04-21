@@ -55,7 +55,7 @@ def profile(request):
 def home(request):
     
     user = request.user
-    reports = reportedCar.objects.filter(reported_by=user).all().order_by('-id')
+    reports = reportedCar.objects.filter(reported_by=user).order_by('-id')[:3]
     
     context = {'reports':reports}
     return render(request, 'dashboard/home.html', context)
@@ -65,15 +65,16 @@ def recentReportedCars(request):
     if request.method == "POST":
         comment = request.POST.get('comment')
         car_number = request.POST.get('car_number')
-        
-        issue = reportedCar(car_number, reported_issue=comment, reported_by=request.user)
-        issue.save()
-        
-    user = request.user
-    reports = reportedCar.objects.filter(reported_by=user).all().order_by('-id')
+        car_number = CarInfo.objects.filter(car_number=car_number).first()
+        print(car_number, comment)
+        try:
+            issue = reportedCar(car_number=car_number, reported_issue=comment, reported_by=request.user)
+            issue.save()
+            messages.success(request, "Thank you for reporting the issue!")
+        except:
+            messages.error(request, "An error occured  while adding the report")
     
-    context = {'reports':reports}
-    return render(request, 'dashboard/home.html', context)
+    return redirect(reverse('home'))
 
 
 

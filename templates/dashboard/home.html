@@ -55,103 +55,106 @@
     <h3 style="color: #fff; text-align: center; margin-top: 10px; margin-bottom: 10px">Hello, {{request.user}}!</h3>
 
 
-    <center>
-        <div class="card grid" style="background: url({% static 'img/Volta-River-Authority.png' %})">
-            <div>
-                {% comment %} <img src="{% static 'img/Volta-River-Authority.png' %}" alt="weight" width="100px" height="100px"> {% endcomment %}
-            </div>
-            <div>
-                {% comment %} <h5>Goal Weight</h5> {% endcomment %}
-                <h1>{{user_calorie.desired_weight}}</h1>
-            </div>
+
+    <div class="card grid" style="background: url({% static 'img/Volta-River-Authority.png' %})">
+        <div>
+            {% comment %} <img src="{% static 'img/Volta-River-Authority.png' %}" alt="weight" width="100px"
+                height="100px"> {% endcomment %}
         </div>
+        <div>
+            {% comment %} <h5>Goal Weight</h5> {% endcomment %}
+            <h1>{{user_calorie.desired_weight}}</h1>
+        </div>
+    </div>
 
-    </center>
-        <div class="card calorie">
 
-            <h5>Search Number Plate</h5>
-            <form id="calorie-form" method="POST" action="{% url 'camera' %}">
-                {% csrf_token %}
+    <div class="card calorie">
 
-                <div class="form-group row">
-                    <label for="age" class="col-sm-2 col-form-label">Car Number</label>
-                    <div class="col-sm-10">
-                        <input type="text" class="form-control carnumber" id="carnumber" name="carnumber" placeholder="GA-4671-24">
-                    </div>
+        <h5>Search Number Plate</h5>
+        <form id="calorie-form" method="POST" action="{% url 'recentReportedCars' %}">
+            {% csrf_token %}
+
+            <div class="form-group row">
+                <label for="age" class="col-sm-2 col-form-label">Car Number</label>
+                <div class="col-sm-10">
+                    <input type="text" class="form-control carnumber" id="carnumber" name="carnumber"
+                        placeholder="GA-4671-24">
                 </div>
+            </div>
 
 
+            <div class="form-group">
+                <input type="submit" value="Check" id="Calculate" class="btn btn-primary btn-block Calculate">
+            </div>
+
+
+
+            <div id="loading">
+                <img src="{% static 'img/Loading.gif' alt='Loading' %}">
+            </div>
+
+            <div id="results" class="pt-4">
+                <h5>Results</h5>
                 <div class="form-group">
-                    <input type="submit" value="Check" id="Calculate" class="btn btn-primary btn-block Calculate">
-                </div>
 
+                    Car number
+                    <input type="text" class="form-control car_number" id="car_number" name="car_number">
+                    Car owner
+                    <input type="text" class="form-control car_owner" id="car_owner" name="total_calories" disabled>
+                    Owner dob
+                    <input type="text" class="form-control owner_dob" id="owner_dob" name="total_calories" disabled>
+                    Telephone
+                    <input type="text" class="form-control telephone" id="telephone" name="total_calories" disabled>
+                    Car model
+                    <input type="text" class="form-control car_model" id="car_model" name="total_calories" disabled>
+                    Car type
+                    <input type="text" class="form-control car_type" id="car_type" name="total_calories" disabled>
+                    Color
+                    <input type="text" class="form-control color" id="color" name="total_calories" disabled>
+                    Date of reg
+                    <input type="text" class="form-control date_of_reg" id="date_of_reg" name="total_calories" disabled>
+                    Region of reg
+                    <input type="text" class="form-control region_of_reg" id="region_of_reg" name="total_calories"
+                        disabled>
 
+                    {% comment %} <img id="image" height=150 width=150 source="" /> {% endcomment %}
 
-                <div id="loading">
-                    <img src="{% static 'img/Loading.gif' alt='Loading' %}">
-                </div>
-
-                <div id="results" class="pt-4">
-                    <h5>Results</h5>
-                    <div class="form-group">
-                        
-                            Car number
-                            <input type="text" class="form-control car_number" id="car_number" name="total_calories" disabled>
-                            Car owner
-                            <input type="text" class="form-control car_owner" id="car_owner" name="total_calories" disabled>
-                            Owner dob
-                            <input type="text" class="form-control owner_dob" id="owner_dob" name="total_calories" disabled>
-                            Telephone
-                            <input type="text" class="form-control telephone" id="telephone" name="total_calories" disabled>
-                            Car model
-                            <input type="text" class="form-control car_model" id="car_model" name="total_calories" disabled>
-                            Car type
-                            <input type="text" class="form-control car_type" id="car_type" name="total_calories" disabled>
-                            Color
-                            <input type="text" class="form-control color" id="color" name="total_calories" disabled>
-                            Date of reg
-                            <input type="text" class="form-control date_of_reg" id="date_of_reg" name="total_calories" disabled>
-                            Region of reg
-                            <input type="text" class="form-control region_of_reg" id="region_of_reg" name="total_calories" disabled>
-                            
-                            {% comment %} <img  id="image" height=150 width=150  source=""/> {% endcomment %}
-
-                            <br><br>
-                            <center><span>Report Issue</span></center>
-                            <input type="text" class="form-control comment" id="comment" name="comment" placeholder="Comment">
-                            <br>
-                            <input type="submit"  value="Submit Report" class="btn btn-primary"/>
-                        
-                    </div>
+                    <br><br>
+                    <center><span>Report Issue</span></center>
+                    <input type="text" class="form-control comment" id="comment" name="comment" placeholder="Comment">
+                    <br>
+                    <input type="submit" value="Submit Report" class="btn btn-primary" />
 
                 </div>
-        </div>
-        </form>
-        </div>
 
-
-        <div class="card calorie">
-            <h5>Recent Reports</h5>
-            <div>
-                <table id="table">
-                    <tr>
-                        <th>Car Number</th>
-                        <th>Report Date</th>
-                    </tr>
-                    {% for report in reports %}
-                        <tr>
-                            <td>{{report.car_number}}</td>
-                            <td>{{report.reported_date}}</td>
-                        </tr>
-                    {% endfor %}
-                    
-                </table>
             </div>
+    </div>
+    </form>
+    </div>
 
+
+    <div class="card calorie">
+        <h5>Recent Reports</h5>
+        <div>
+            <table id="table">
+                <tr>
+                    <th>Car Number</th>
+                    <th>Report Date</th>
+                </tr>
+                {% for report in reports %}
+                <tr>
+                    <td>{{report.car_number}}</td>
+                    <td>{{report.reported_date}}</td>
+                </tr>
+                {% endfor %}
+
+            </table>
         </div>
 
-        
-    
+    </div>
+
+
+
 
     {% endblock body %}
 
@@ -203,7 +206,7 @@
                 e.preventDefault();
                 $('#loading').show();
                 $('#results').hide();
-                var carnumber = $( "#carnumber" ).val().toUpperCase();
+                var carnumber = $("#carnumber").val().toUpperCase();
 
                 $.ajax({
                     url: "{% url 'searchCarNumber' %}",
@@ -215,8 +218,8 @@
                     headers: {
                         'X-CSRFToken': '{{ csrf_token }}'
                     },
-                    
-                    success: function(response){
+
+                    success: function (response) {
                         console.log(response)
                         $('#loading').hide();
                         $('#results').show();
@@ -230,7 +233,7 @@
                         $('.date_of_reg').val(response.date_of_reg);
                         $('.region_of_reg').val(response.region_of_reg);
                     },
-                    error: function(data){
+                    error: function (data) {
                         $('#loading').hide();
                         $('#results').hide();
                         alert("Car number not found!");

@@ -46,9 +46,9 @@
         <div id="results" class="pt-4">
             <h5>Results</h5>
             <div class="form-group">
-                
+                <form method="POST" action="{% url 'recentReportedCars' %}">
                     Car number
-                    <input type="text" class="form-control car_number" id="car_number" name="total_calories" disabled>
+                    <input type="text" class="form-control car_number" id="car_number" name="car_number">
                     Car owner
                     <input type="text" class="form-control car_owner" id="car_owner" name="total_calories" disabled>
                     Owner dob
@@ -73,6 +73,8 @@
                     <input type="text" class="form-control comment" id="comment" name="comment" placeholder="Comment">
                     <br>
                     <input type="submit"  value="Submit Report" class="btn btn-primary"/>
+
+                </form>
                 
             </div>
 
