@@ -1,3 +1,4 @@
+import json
 from django.shortcuts import render, redirect, reverse
 from .models import *
 from account.models import *
@@ -10,6 +11,7 @@ from django.views.decorators.csrf import csrf_exempt
 import base64
 from PIL import Image
 import pytesseract
+import io
 
 # Create your views here.
 def profile(request):
@@ -54,6 +56,22 @@ def home(request):
     
     user = request.user
     reports = reportedCar.objects.filter(reported_by=user).all().order_by('-id')
+    
+    context = {'reports':reports}
+    return render(request, 'dashboard/home.html', context)
+
+
+def recentReportedCars(request):
+    if request.method == "POST":
+        comment = request.POST.get('comment')
+        car_number = request.POST.get('car_number')
+        
+        issue = reportedCar(car_number, reported_issue=comment, reported_by=request.user)
+        issue.save()
+        
+    user = request.user
+    reports = reportedCar.objects.filter(reported_by=user).all().order_by('-id')
+    
     context = {'reports':reports}
     return render(request, 'dashboard/home.html', context)
 
@@ -100,19 +118,65 @@ def process_image(request):
         # Get image data from POST request
         image_data = request.POST.get('image_data', '')
 
-        # Extract image data from base64 string
-        _, encoded_data = image_data.split(',', 1)
-        decoded_data = base64.b64decode(encoded_data)
+        try:
+            # Extract image data from base64 string
+            _, encoded_data = image_data.split(',', 1)
+            decoded_data = base64.b64decode(encoded_data)
 
-        # Save image to a temporary file
-        with open('temp_image.png', 'wb') as f:
-            f.write(decoded_data)
+            # Validate and open the image using Pillow
+            image = Image.open(io.BytesIO(decoded_data))
+            
+            # Perform OCR using pytesseract
+            ocr_text = pytesseract.image_to_string(image)
 
-        # Perform OCR using pytesseract
-        image = Image.open('temp_image.png')
-        ocr_text = pytesseract.image_to_string(image)
+            # Assuming carinfo is an instance of your model
+            carinfo = CarInfo.objects.filter(car_number=ocr_text).first()
 
-        # Return OCR result as JSON response
-        return JsonResponse({'ocr_text': ocr_text})
+            context = {
+                'car_number': carinfo.car_number,
+                'car_owner': carinfo.owner_name,
+                'picture': carinfo.picture.url if carinfo.picture else None,
+                'owner_dob': carinfo.owner_dob,
+                'car_model': carinfo.car_model,
+                'car_type': carinfo.car_type,
+                'color': carinfo.color,
+                'date_of_reg': carinfo.date_of_reg,
+                'region_of_reg': carinfo.region_of_reg,
+                'owner_phone': carinfo.owner_phone,
+            }
 
-    return JsonResponse({'error': 'Invalid request method'})
+            return JsonResponse(context, status=200)
+        except Exception as e:
+            return JsonResponse({'error': str(e)}, status=400)
+        
+    return JsonResponse(status=405)
+
+
+
+
+def searchCarNumber(request):
+    if request.method == "POST":
+        carnumber = json.loads(request.body)
+        print(carnumber['carnumber'])
+        carinfo = CarInfo.objects.filter(car_number=carnumber['carnumber']).first()
+        
+        context = {
+            'car_number': carinfo.car_number,
+            'car_owner': carinfo.owner_name,
+            'picture': carinfo.picture.url if carinfo.picture else None,
+            'owner_dob': carinfo.owner_dob,
+            'car_model': carinfo.car_model,
+            'car_type': carinfo.car_type,
+            'color': carinfo.color,
+            'date_of_reg': carinfo.date_of_reg,
+            'region_of_reg': carinfo.region_of_reg,
+            'owner_phone': carinfo.owner_phone,
+        }
+    
+        print(list(context.values()))
+    return  JsonResponse(context, status=200, safe=False)
+
+
+
+def reportIssue(request):
+    reportedCar

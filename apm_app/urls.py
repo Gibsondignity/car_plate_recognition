@@ -9,5 +9,9 @@ urlpatterns = [
     path('home', views.home, name="home"),
     path('camera', views.camera, name="camera"),
     path('chat', views.chat, name="chat"),
+    path('searchCarNumber', views.searchCarNumber, name="searchCarNumber"),
+    path('process_image', views.process_image, name="process_image"),
+    
+    
     
 ] + static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)

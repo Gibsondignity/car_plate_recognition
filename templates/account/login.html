@@ -1,169 +1,159 @@
 {% load static %}
-<!doctype html>
-<html lang="en" class="h-100">
+<!DOCTYPE html>
+<html lang="en">
 
 <head>
-    <meta charset="utf-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
-    <meta name="description" content="">
-    <meta name="author" content="">
-    <meta name="generator" content="">
-    <title>Login</title>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Number Plate Recognition </title>
 
-    <!-- manifest meta -->
-    <meta name="apple-mobile-web-app-capable" content="yes">
+    <style>
+        /* Importing fonts from Google */
+        @import url('https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700;800;900&display=swap');
 
-    <!-- Favicons -->
-    {% comment %} <link rel="apple-touch-icon" href="{% static 'img/favicon180.png' %}" sizes="180x180">
-    <link rel="icon" href="{% static 'img/favicon32.png' %}" sizes="32x32" type="image/png">
-    <link rel="icon" href="{% static 'img/favicon16.png' %}" sizes="16x16" type="image/png"> {% endcomment %}
+        /* Reseting */
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Poppins', sans-serif;
+        }
 
-    <!-- Material icons-->
-    <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
+        body {
+            background: #ecf0f3;
+        }
 
-    <!-- Google fonts-->
-    <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@300;400;500&display=swap" rel="stylesheet">
+        .wrapper {
+            max-width: 350px;
+            margin-top: 50px;
+            min-height: 500px;
+            margin: 80px auto;
+            padding: 40px 30px 30px 30px;
+            background-color: #ecf0f3;
+            border-radius: 15px;
+            box-shadow: 13px 13px 20px #cbced1, -13px -13px 20px #fff;
+        }
 
-    <!-- swiper CSS -->
-    <link href="{% static 'vendor/swiper/css/swiper.min.css' %}" rel="stylesheet">
+        .logo {
+            width: 80px;
+            margin: auto;
+        }
 
-    <!-- Custom styles for this template -->
-    <link href="{% static 'css/style.css' %}" rel="stylesheet" id="style">
+        .logo img {
+            width: 100%;
+            height: 80px;
+            object-fit: cover;
+            border-radius: 50%;
+            box-shadow: 0px 0px 3px #5f5f5f,
+                0px 0px 0px 5px #ecf0f3,
+                8px 8px 15px #a7aaa7,
+                -8px -8px 15px #fff;
+        }
+
+        .wrapper .name {
+            font-weight: 600;
+            font-size: 1.4rem;
+            letter-spacing: 1.3px;
+            padding-left: 10px;
+            color: #555;
+        }
+
+        .wrapper .form-field input {
+            width: 100%;
+            display: block;
+            border: none;
+            outline: none;
+            background: none;
+            font-size: 1.2rem;
+            color: #666;
+            padding: 10px 15px 10px 10px;
+            /* border: 1px solid red; */
+        }
+
+        .wrapper .form-field {
+            padding-left: 10px;
+            margin-bottom: 20px;
+            border-radius: 20px;
+            box-shadow: inset 8px 8px 8px #cbced1, inset -8px -8px 8px #fff;
+        }
+
+        .wrapper .form-field .fas {
+            color: #555;
+        }
+
+        .wrapper .btn {
+            box-shadow: none;
+            width: 100%;
+            height: 40px;
+            background-color: #03A9F4;
+            color: #fff;
+            border-radius: 25px;
+            box-shadow: 3px 3px 3px #b1b1b1,
+                -3px -3px 3px #fff;
+            letter-spacing: 1.3px;
+        }
+
+        .wrapper .btn:hover {
+            background-color: #039BE5;
+        }
+
+        .wrapper a {
+            text-decoration: none;
+            font-size: 0.8rem;
+            color: #03A9F4;
+        }
+
+        .wrapper a:hover {
+            color: #039BE5;
+        }
+
+        @media(max-width: 380px) {
+            .wrapper {
+                margin: 30px 20px;
+                padding: 40px 15px 15px 15px;
+            }
+        }
+    </style>
 </head>
 
-<body class="body-scroll d-flex flex-column h-100 menu-overlay">
-    <!-- screen loader -->
-    <div class="container-fluid h-100 loader-display">
-        <div class="row h-100">
-            <div class="align-self-center col">
-                <div class="logo-loading">
-                    <div class="icon icon-100 mb-4 rounded-circle">
-                        {% comment %} I will put an image here {% endcomment %}
-                        {% comment %} <img src="{% static 'img/favicon144.png' %}" alt="" class="w-100"> {% endcomment %}
-                    </div>
-                    <h4 class="text-default">WELCOME TO </h4>
-                    <p class="text-secondary">CAR NUMBER PLATE RECOGNITION</p>
-                    <div class="loader-ellipsis">
-                        <div></div>
-                        <div></div>
-                        <div></div>
-                        <div></div>
-                    </div>
-                </div>
+<body>
+    
+    <div class="wrapper">
+        <div class="logo">
+            <img src="{% static 'img/VRA_Logo.png' %}" alt="">
+        </div>
+
+        <br>
+        <br>
+
+        <div class="text-center mt-4 name">
+           <center><h4>Login</h4> </center>
+        </div>
+        <br>
+        <br>
+        <center>
+            {% if messages %}
+            {% for message in messages  %}
+                <p style="color: red;">{{ message }}</p>
+            {% endfor %}
+            {% endif %}
+        </center>
+        <form class="p-3 mt-3" action="{% url 'accounts' %}" method="POST">
+            {% csrf_token %}
+            <div class="form-field d-flex align-items-center">
+                <span class="far fa-user"></span>
+                <input type="text" name="username" id="username" placeholder="Username">
             </div>
+            <div class="form-field d-flex align-items-center">
+                <span class="fas fa-key"></span>
+                <input type="password" name="password" id="password" placeholder="Password">
+            </div>
+            <button class="btn mt-3">Login</button>
+        </form>
+        <div class="text-center fs-6">
+            <a href="{% url 'reset_password' %}">Forget password?</a> 
         </div>
     </div>
-
-
-
-
-    <!-- Begin page content -->
-    <form action="{% url 'accounts' %}" method="POST">
-        {% csrf_token %}
-        <main class="flex-shrink-0 main has-footer">
-            <!-- Fixed navbar -->
-            <header class="header">
-                <div class="row">
-                    <div class="col-auto px-0">
-                        <button class="menu-btn btn btn-40 btn-link back-btn" type="button">
-                            {% comment %} <span class="material-icons">keyboard_arrow_left</span> {% endcomment %}
-                        </button>
-                    </div>
-                    <div class="text-left col align-self-center">
-                    
-                    </div>
-                    <div class="ml-auto col-auto align-self-center">
-                        {% comment %} <a href="{% url 'register' %}" class="text-white">
-                            Sign up
-                        </a> {% endcomment %}
-                    </div>
-                </div>
-            </header>
-            
-            
-            <div class="container h-100 text-white">
-                <div class="row h-100">
-                    <div class="col-12 align-self-center mb-4">
-                        <div class="row justify-content-center">
-                            <div class="col-11 col-sm-7 col-md-6 col-lg-5 col-xl-4">
-                                <h2 class="font-weight-normal mb-5">Login </h2>
-                                <center>
-                                    {% if messages %}
-                                    {% for message in messages  %}
-                                        <p style="color: red;">{{ message }}</p>
-                                    {% endfor %}
-                                    {% endif %}
-                                </center>
-                                <div class="form-group float-label active">
-                                    <input type="text" class="form-control text-white" name="username" id="username" class="username" placeholder="" >
-                                    <label class="form-control-label text-white">Username</label>
-                                    <span class="username_message" style="color: red;"></span>
-                                </div>
-                                <div class="form-group float-label position-relative">
-                                    <input type="password" class="form-control text-white " name="password" id="password" class="password" >
-                                    <label class="form-control-label text-white">Password</label>
-                                    <span class="pass_message" style="color: red;"></span>
-                                </div>  
-                                <p class="text-right"><a href="{% url 'reset_password' %}" class="text-white">Forgot Password?</a></p>
-                            </div>
-                        </div>
-                    </div>
-                    
-                </div>
-            </div>
-        </main>
-        <!-- footer-->
-        <div class="footer no-bg-shadow py-3">
-            <div class="row justify-content-center">
-                <div class="col">
-                    <button class="btn btn-default rounded btn-block">Login</button>
-                </div>
-            </div>
-        </div>
-
-    </form>
-
-    <!-- Required jquery and libraries -->
-    <script src="{% static 'js/jquery-3.3.1.min.js' %}"></script>
-    <script src="{% static 'js/popper.min.js' %}"></script>
-    <script src="{% static 'vendor/bootstrap/js/bootstrap.min.js' %}"></script>
-
-    <!-- cookie js -->
-    <script src="{% static 'js/jquery.cookie.js' %}"></script>
-
-    <!-- Swiper slider  js -->
-    <script src="{% static 'vendor/swiper/js/swiper.min.js' %}"></script>
-
-    <!-- Customized jquery file  -->
-    <script src="{% static 'js/main.js' %}"></script>
-    <script src="{% static 'js/color-scheme-demo.js' %}"></script>
-
-
-    <!-- page level custom script -->
-    <script src="{% static 'js/app.js' %}"></script>
-
-    <script>
-        $(document).on('click', '.btn-block', function (e) {
-            //e.preventDefault();
-            var username = $('#username').val();
-            var password = $('#password').val();
-
-            console.log(username, password);
-            if (username == '') {
-                $('.username_message').html('Username is required');
-            } else {
-                $('.username_message').html('');
-            }
-
-            if (password == '') {
-                $('.pass_message').html('Password is required');
-            } else {
-                $('.pass_message').html('');
-            }
-        });
-
-    </script>
-    
 </body>
 
 </html>

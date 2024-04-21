@@ -66,7 +66,7 @@
             </div>
         </div>
 
-
+    </center>
         <div class="card calorie">
 
             <h5>Search Number Plate</h5>
@@ -76,7 +76,7 @@
                 <div class="form-group row">
                     <label for="age" class="col-sm-2 col-form-label">Car Number</label>
                     <div class="col-sm-10">
-                        <input type="text" class="form-control" id="food" name="food" placeholder="4671-24">
+                        <input type="text" class="form-control carnumber" id="carnumber" name="carnumber" placeholder="GA-4671-24">
                     </div>
                 </div>
 
@@ -94,9 +94,34 @@
                 <div id="results" class="pt-4">
                     <h5>Results</h5>
                     <div class="form-group">
-                        <div class="input-group">
-                            <input type="text" class="form-control" id="total-calories" name="total_calories" disabled>
-                        </div>
+                        
+                            Car number
+                            <input type="text" class="form-control car_number" id="car_number" name="total_calories" disabled>
+                            Car owner
+                            <input type="text" class="form-control car_owner" id="car_owner" name="total_calories" disabled>
+                            Owner dob
+                            <input type="text" class="form-control owner_dob" id="owner_dob" name="total_calories" disabled>
+                            Telephone
+                            <input type="text" class="form-control telephone" id="telephone" name="total_calories" disabled>
+                            Car model
+                            <input type="text" class="form-control car_model" id="car_model" name="total_calories" disabled>
+                            Car type
+                            <input type="text" class="form-control car_type" id="car_type" name="total_calories" disabled>
+                            Color
+                            <input type="text" class="form-control color" id="color" name="total_calories" disabled>
+                            Date of reg
+                            <input type="text" class="form-control date_of_reg" id="date_of_reg" name="total_calories" disabled>
+                            Region of reg
+                            <input type="text" class="form-control region_of_reg" id="region_of_reg" name="total_calories" disabled>
+                            
+                            {% comment %} <img  id="image" height=150 width=150  source=""/> {% endcomment %}
+
+                            <br><br>
+                            <center><span>Report Issue</span></center>
+                            <input type="text" class="form-control comment" id="comment" name="comment" placeholder="Comment">
+                            <br>
+                            <input type="submit"  value="Submit Report" class="btn btn-primary"/>
+                        
                     </div>
 
                 </div>
@@ -126,7 +151,7 @@
         </div>
 
         
-    </center>
+    
 
     {% endblock body %}
 
@@ -162,9 +187,7 @@
                         image_data: imageDataURL
                     },
                     success: function (data) {
-                        // Handle response from backend
                         console.log(data);
-                        // Update UI with OCR result if needed
                     },
                     error: function (xhr, textStatus, errorThrown) {
                         console.error('Error:', errorThrown);
@@ -178,25 +201,42 @@
         $(document).ready(function () {
             $('#Calculate').click(function (e) {
                 e.preventDefault();
-                var food = $('#food').val();
-                var appId = 'a327dcd3';
-                var appKey = '13a29aa0f8a09ef879dc0808ead148ce';
                 $('#loading').show();
                 $('#results').hide();
+                var carnumber = $( "#carnumber" ).val().toUpperCase();
 
-                // Call Edamam API
-                $.getJSON('https://api.edamam.com/api/food-database/parser?ingr=' + food + '&app_id=' + appId + '&app_key=' + appKey, function (data) {
-                    // Get the first result
-                    var result = data.hints[0];
+                $.ajax({
+                    url: "{% url 'searchCarNumber' %}",
+                    type: 'POST',
+                    data: JSON.stringify({
+                        carnumber: carnumber
+                    }),
+                    contentType: "application/json",
+                    headers: {
+                        'X-CSRFToken': '{{ csrf_token }}'
+                    },
+                    
+                    success: function(response){
+                        console.log(response)
+                        $('#loading').hide();
+                        $('#results').show();
+                        $('.car_number').val(response.car_number);
+                        $('.car_owner').val(response.car_owner);
+                        $('.owner_dob').val(response.owner_dob);
+                        $('.telephone').val(response.owner_phone);
+                        $('.car_model').val(response.car_model);
+                        $('.car_type').val(response.car_type);
+                        $('.color').val(response.color);
+                        $('.date_of_reg').val(response.date_of_reg);
+                        $('.region_of_reg').val(response.region_of_reg);
+                    },
+                    error: function(data){
+                        $('#loading').hide();
+                        $('#results').hide();
+                        alert("Car number not found!");
+                    },
 
-                    // Get the number of calories
-                    var calories = result.food.nutrients.ENERC_KCAL;
-                    console.log(calories)
-                    // Display the number of calories
-                    $('#loading').hide();
-                    $('#results').show();
-                    $('#total-calories').val(food + ":  " + calories);
-                });
+                })
             });
         });
 

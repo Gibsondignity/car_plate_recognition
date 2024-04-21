@@ -12,8 +12,14 @@ from account.models import *
 # Create your views here.
 def account_login(request):
     if request.user.is_authenticated:
-        #return redirect(reverse('dashboard'))
-        messages.error(request, 'You are already logged in')
+        security_question = SecurityAnswer.objects.filter(user=request.user).first()
+        if not request.user.phone or not request.user.first_name or not request.user.second_name or not security_question:
+            messages.success(request, "Please finish setting up your profile!")
+            return redirect(reverse('profile'))
+        else: 
+            messages.success(request, 'You are already looged in!')
+            return redirect(reverse('home'))
+        
     if request.method == 'POST':
         
         user = authenticate(request, username=request.POST['username'], password=request.POST['password'])
